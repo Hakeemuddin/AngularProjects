@@ -1,0 +1,162 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+
+</div>
+
+<div *ngIf="stepOne" class="container-fluid text-center">
+  <h1>Step1</h1>
+  <div class="form-group">
+    <label for="file" class="label">Select File</label>
+    <input class="form-control" name="file" type="file" id="file" (change)="handleFileInput($event.target.files)">
+  </div>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th>Select</th>
+        <th scope="col">Date</th>
+        <th scope="col">Time</th>
+        <th scope="col">File Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="files.length===0" class="info">No data available</tr>
+      <tr *ngFor="let file of files">
+        <td><input class="check-box" name="selectedFile" type="checkbox" (change)="onChange($event,file)" /></td>
+        <td scope="row">{{file.lastModifiedDate | date : 'M/d/yy'}}</td>
+        <td>{{file.lastModifiedDate | date : 'h:mm a'}}</td>
+        <td>{{file.name}}</td>
+      </tr>
+    </tbody>
+
+  </table>
+  <div *ngIf="selectedFiles.length===0 && isSubmitted" class="alert alert-danger">
+    Please select atleast one file to proceed
+  </div>
+  <div class="row">
+    <div class="col-md-12 float-right">
+      <button type="submit" class="btn btn-primary" (click)="onSubmit()">Next</button>
+    </div>
+  </div>
+
+
+</div>
+
+<div *ngIf="stepTwo" class="container-fluid text-left">
+  <h1>Step2</h1>
+  <form [formGroup]="stepTwoForm" novalidate (ngSubmit)="stepTwoSubmit()">
+    <div class="row">
+      <div class="col-md-12 form-group">
+        <label class="label" for="name">
+          Name
+        </label>
+        <input type="text" class="form-control" formControlName="name" name="name" />
+      </div>
+
+      <div
+        *ngIf="stepTwoForm.controls['name'].invalid && (stepTwoForm.controls['name'].dirty || stepTwoForm.controls['name'].touched) || (isSubmitted && stepTwoForm.controls['name'].invalid)"
+        class="alert alert-danger">
+
+        <div *ngIf="stepTwoForm.controls['name'].errors && stepTwoForm.controls['name'].errors.required">
+          Name is required.
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 form-group">
+        <label class="label" for="address">
+          Address
+        </label>
+        <input type="text" class="form-control" formControlName="address" />
+      </div>
+      <div
+        *ngIf="stepTwoForm.controls['address'].invalid && (stepTwoForm.controls['address'].dirty || stepTwoForm.controls['address'].touched) || (isSubmitted && stepTwoForm.controls['address'].invalid)"
+        class="alert alert-danger">
+
+        <div *ngIf="stepTwoForm.controls['address'].errors && stepTwoForm.controls['address'].errors.required">
+          Address is required.
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 form-group">
+        <label class="label" for="phone">
+          Phone
+        </label>
+        <input type="tel" class="form-control" formControlName="phone" />
+      </div>
+      <div
+        *ngIf="stepTwoForm.controls['phone'].invalid && (stepTwoForm.controls['phone'].dirty || stepTwoForm.controls['phone'].touched) || (isSubmitted && stepTwoForm.controls['phone'].invalid)"
+        class="alert alert-danger">
+
+        <div *ngIf="stepTwoForm.controls['phone'].errors && stepTwoForm.controls['phone'].errors.required">
+          Phone is required.
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 form-group">
+        <label class="label" for="email">
+          Email
+        </label>
+        <input type="email" class="form-control" formControlName="email" />
+      </div>
+      <div
+        *ngIf="stepTwoForm.controls['email'].invalid && (stepTwoForm.controls['email'].dirty || stepTwoForm.controls['email'].touched) || (isSubmitted && stepTwoForm.controls['email'].invalid)"
+        class="alert alert-danger">
+
+        <div *ngIf="stepTwoForm.controls['email'].errors && stepTwoForm.controls['email'].errors.required">
+          Email is required.
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 float-right">
+        <button type="submit" class="btn btn-primary">Next</button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+<div *ngIf="stepThree" class="container-fluid text-left">
+  <h1>Step3</h1>
+  <div class="col-md-6">
+    <label class="col-md-6 label">Name</label>
+    <span class="col-md-6">{{formData.name}}</span>
+  </div>
+  <div class="col-md-6">
+    <label class="col-md-6 label">Address</label>
+    <span class="col-md-6">{{formData.address}}</span>
+  </div>
+  <div class="col-md-6">
+    <label class="col-md-6 label">Phone</label>
+    <span class="col-md-6">{{formData.phone}}</span>
+  </div>
+  <div class="col-md-6">
+    <label class="col-md-6 label">Email</label>
+    <span class="col-md-6">{{formData.email}}</span>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 float-right">
+      <button type="submit" class="btn btn-primary" (click)="stepThreeSubmit()">Submit</button>
+    </div>
+  </div>
+
+</div>
+<div *ngIf="finalStep">
+  <h1>Step4</h1>
+  <div class="alert alert-success">
+    Details submitted successfully !!!
+  </div>
+
+
+</div>
